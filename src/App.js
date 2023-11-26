@@ -7,7 +7,7 @@ import Detail from './pages/Detail.jsx';
 import axios from 'axios';
 
 function App() {
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
 
   return (
@@ -47,11 +47,14 @@ function App() {
                 </div>
               </div>
               <button
-                onClick={() => {
-                  axios
-                    .get('https://codingapple1.github.io/shop/data2.json')
-                    .then((result) => console.log(result.data))
-                    .catch((error) => console.log(error));
+                onClick={async () => {
+                  try {
+                    const result = await axios.get('https://codingapple1.github.io/shop/data2.json');
+                    let newShoes = [...shoes, ...result.data];
+                    setShoes(newShoes);
+                  } catch (error) {
+                    console.log(error);
+                  }
                 }}
               >
                 버튼
@@ -84,7 +87,7 @@ const About = () => {
 const Card = (props) => {
   return (
     <div className='col-md-4'>
-      <img alt='shoes' src={props.shoes.src} width='80%' />
+      <img alt='shoes' src={`https://codingapple1.github.io/shop/shoes${props.i + 1}.jpg`} width='80%' />
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.price}</p>
     </div>
